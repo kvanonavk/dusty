@@ -1,0 +1,211 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Dusty: mixed-reality cleaning for Meta Quest</title>
+<meta name="description" content="Dusty is a mixed-reality app for Meta Quest 3 and 3S. Grab your vacuum or mop, put on your headset, and let your floor transform.">
+<meta name="robots" content="index, follow">
+<meta property="og:title" content="Dusty: mixed-reality cleaning for Meta Quest">
+<meta property="og:description" content="Cleaning your home doesn't have to feel like a chore. Grab your vacuum or mop, put on your headset, and let your floor transform.">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://dusty.nerobeinteractive.com/">
+<meta property="og:image" content="https://dusty.nerobeinteractive.com/img/card.jpg">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="icon" type="image/png" sizes="48x48" href="img/icon-48.png">
+<link rel="apple-touch-icon" href="img/icon-192.png">
+<!-- Self-contained on purpose: no fonts, scripts, cookies or trackers from anywhere else.
+     Published like the privacy page (docs/PRIVACY_POLICY.md "Hosting"). Its texts are the Store
+     listing's (docs/STORE_LISTING.md), word for word: change both together. -->
+<style>
+  :root {
+    --bg: #f4f8fd;
+    --card: #ffffff;
+    --text: #1d2433;
+    --dim: #566074;
+    --line: #dde3ec;
+    --accent: #1f6fd6;
+    --bubble: #e6f2ff;
+    --bubble-line: #b9d6fb;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --bg: #10141c;
+      --card: #171d28;
+      --text: #e7ecf4;
+      --dim: #a3adbf;
+      --line: #2a3344;
+      --accent: #7db3ff;
+      --bubble: #16253b;
+      --bubble-line: #2b4a75;
+    }
+  }
+  * { box-sizing: border-box; }
+  html { -webkit-text-size-adjust: 100%; }
+  body {
+    margin: 0;
+    background: var(--bg);
+    color: var(--text);
+    font: 18px/1.6 system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  }
+  main { max-width: 1000px; margin: 0 auto; padding: 24px 16px 64px; }
+  .hero { margin: 0; }
+  .hero img {
+    display: block;
+    width: 100%;
+    height: auto;
+    aspect-ratio: 16 / 9;
+    border-radius: 28px;
+    border: 1px solid var(--line);
+  }
+  .intro { max-width: 720px; margin: 0 auto; text-align: center; }
+  h1 { font-size: 2.2rem; line-height: 1.2; margin: 36px 0 12px; letter-spacing: -0.01em; }
+  .lead { font-size: 1.2rem; margin: 0 0 12px; }
+  .intro p { margin: 0 0 20px; }
+  .pill {
+    display: inline-block;
+    background: var(--bubble);
+    border: 1px solid var(--bubble-line);
+    border-radius: 999px;
+    padding: 8px 20px;
+    margin: 0;
+    font-weight: 600;
+  }
+  h2 { font-size: 1.5rem; line-height: 1.25; margin: 56px 0 8px; text-align: center; }
+  .sub { max-width: 720px; margin: 0 auto 8px; text-align: center; color: var(--dim); }
+  .grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 16px;
+    margin: 24px 0 0;
+    padding: 0;
+    list-style: none;
+  }
+  .grid li {
+    background: var(--card);
+    border: 1px solid var(--line);
+    border-radius: 20px;
+    padding: 20px 22px;
+    margin: 0;
+  }
+  .grid h3 { font-size: 1.1rem; margin: 0 0 6px; }
+  .grid p { margin: 0 0 8px; color: var(--dim); font-size: 1rem; line-height: 1.5; }
+  .grid p:last-child { margin-bottom: 0; }
+  .need {
+    max-width: 720px;
+    margin: 24px auto 0;
+    background: var(--bubble);
+    border: 1px solid var(--bubble-line);
+    border-radius: 20px;
+    padding: 12px 28px 16px;
+  }
+  .need ol { padding-left: 1.4em; margin: 8px 0; }
+  .need li { margin: 6px 0; }
+  .center { max-width: 720px; margin: 16px auto 0; text-align: center; }
+  a { color: var(--accent); overflow-wrap: anywhere; }
+  footer {
+    max-width: 720px;
+    margin: 64px auto 0;
+    padding-top: 20px;
+    border-top: 1px solid var(--line);
+    text-align: center;
+    font-size: 0.9rem;
+    color: var(--dim);
+  }
+  footer p { margin: 6px 0; }
+  @media (max-width: 560px) {
+    body { font-size: 17px; }
+    main { padding-top: 16px; }
+    .hero img { border-radius: 18px; }
+    h1 { font-size: 1.7rem; margin-top: 28px; }
+    .lead { font-size: 1.1rem; }
+    h2 { margin-top: 44px; }
+    .grid { grid-template-columns: 1fr; }
+    .need { padding: 8px 20px 12px; }
+  }
+</style>
+</head>
+<body>
+<main>
+
+<figure class="hero">
+  <img src="img/hero-1600.webp"
+       srcset="img/hero-800.webp 800w, img/hero-1600.webp 1600w"
+       sizes="(max-width: 1032px) calc(100vw - 32px), 1000px"
+       width="1600" height="900"
+       alt="Dusty: a vacuum clears a path through grass, water and lava laid over a living room floor, while dust bunnies hop away and Mote, a little flying robot, looks on.">
+</figure>
+
+<div class="intro">
+  <h1>Cleaning your home doesn't have to feel like a chore</h1>
+  <p class="lead"><strong>Dusty</strong> makes it easier to get started, more satisfying to keep
+    going, and a lot more fun along the way.</p>
+  <p>Just grab your vacuum or mop, put on your headset, and let your floor transform. In mixed
+    reality, every move clears a path through snow, autumn leaves, or even lava. Underneath it
+    all? Your actual, freshly cleaned floor.</p>
+  <p class="pill">Coming to the Meta Horizon Store</p>
+</div>
+
+<h2>Pick a mode. Pick a mood.</h2>
+
+<ul class="grid">
+  <li>
+    <h3>Just want to switch off?</h3>
+    <p>Put on some music, take your time, and find your flow. No timers, no pressure, no
+      distractions. Just you, your space, and that oddly satisfying feeling of making things
+      clean.</p>
+  </li>
+  <li>
+    <h3>Feeling a little playful?</h3>
+    <p>Let the dust bunnies out! Catch these fluffy troublemakers with your vacuum or mop,
+      discover lost treasures, and collect crumbs to unlock more fun.</p>
+  </li>
+  <li>
+    <h3>Meet Mote, your partner here</h3>
+    <p>Mote is always happy to lend a hand. He'll help you spot the places you've missed, remind
+      you when to wet your mop, and point out where those sneaky dust bunnies might be hiding.</p>
+    <p>Rumor has it he's never missed a spot.</p>
+  </li>
+  <li>
+    <h3>Your room. Your rules.</h3>
+    <p>A rainy street, a lava field, or a snowy wonderland? Dusty has a look for every mood.</p>
+    <p>Mix, match, and make it yours! Customize everything from your floor to your dust bunnies,
+      and give Mote a fresh outfit, too. Unlock new looks, try wild combinations, and make every
+      cleaning session your own!</p>
+  </li>
+</ul>
+
+<h2>Features</h2>
+<div class="need">
+  <ol>
+    <li>Mixed reality gameplay that turns your own room into the cleaning zone</li>
+    <li>Vacuum and mop, two ways to clean</li>
+    <li>A friendly Mote helper who guides you through every step</li>
+    <li>Hidden lost treasures to collect for extra score</li>
+    <li>Unlock customizations: lava, grass, autumn leaves, ghost bunnies, and more</li>
+    <li>Zen mode for cozy, uninterrupted cleaning</li>
+    <li>Achievements for a more gamified experience</li>
+  </ol>
+</div>
+
+<h2>What you need</h2>
+<p class="sub">All you need is a Meta Quest 3 (Meta Quest 3S) and a bit of floor space. No extra
+  gear needed.</p>
+
+<h2>Your home stays yours</h2>
+<p class="sub">What the headset cameras see stays on your headset. The
+  <a href="privacy/">privacy policy</a> says exactly what Dusty uses.</p>
+
+<h2>Contact</h2>
+<p class="center">Questions, ideas or press:
+  <a href="mailto:nerobe.interactive@gmail.com">nerobe.interactive@gmail.com</a></p>
+
+<footer>
+  <p><a href="privacy/">Privacy policy</a></p>
+  <p>© 2026 Nerobe Interactive. Dusty is not affiliated with Meta. Meta Quest and Meta Horizon are
+    trademarks of Meta Platforms, Inc.</p>
+</footer>
+
+</main>
+</body>
+</html>
