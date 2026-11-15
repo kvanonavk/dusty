@@ -6,64 +6,86 @@
 <title>Dusty Privacy Policy</title>
 <meta name="description" content="Privacy policy of Dusty, the mixed-reality floor-cleaning app for Meta Quest. What Dusty uses, what stays on your headset, what leaves it, and how to delete it.">
 <meta name="robots" content="index, follow">
+<meta name="color-scheme" content="only light">
+<meta name="theme-color" content="#dff0ff">
+<link rel="canonical" href="https://dusty.nerobeinteractive.com/privacy/">
+<link rel="icon" type="image/png" sizes="48x48" href="../img/icon-48.png">
+<link rel="apple-touch-icon" href="../img/icon-192.png">
+<link rel="preload" href="../fonts/DustySans-Regular.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="../fonts/DustySans-Semibold.woff2" as="font" type="font/woff2" crossorigin>
 <!-- Self-contained on purpose: no fonts, scripts, cookies or trackers from anywhere else.
-     Edit only here; docs/PRIVACY_POLICY.md says how it's published and what must stay in sync. -->
+     Edit only here; docs/PRIVACY_POLICY.md says what must stay in sync, docs/WEBSITE.md how it's
+     published. Its look follows the homepage's (fonts and logo from ../fonts and ../img). -->
 <style>
-  :root {
-    --bg: #f7f9fc;
-    --card: #ffffff;
-    --text: #1d2433;
-    --dim: #566074;
-    --line: #dde3ec;
-    --accent: #2563c9;
-    --summary: #e9f3ff;
-    --summary-line: #b9d6fb;
+  @font-face { font-family: "Dusty Sans"; src: url(../fonts/DustySans-Regular.woff2) format("woff2"); font-weight: 400; font-display: swap; }
+  @font-face { font-family: "Dusty Sans"; src: url(../fonts/DustySans-Semibold.woff2) format("woff2"); font-weight: 600; font-display: swap; }
+  @font-face {
+    font-family: "Dusty Fallback";
+    src: local("Arial"), local("ArialMT"), local("Arimo"), local("Liberation Sans");
+    size-adjust: 108.4%; ascent-override: 95.9%; descent-override: 24.9%; line-gap-override: 0%;
   }
-  @media (prefers-color-scheme: dark) {
-    :root {
-      --bg: #10141c;
-      --card: #171d28;
-      --text: #e7ecf4;
-      --dim: #a3adbf;
-      --line: #2a3344;
-      --accent: #7db3ff;
-      --summary: #16253b;
-      --summary-line: #2b4a75;
-    }
+  /* The homepage's colours (../index.html), calmer: no bubbles, nothing moves. */
+  :root {
+    --ink: #0f2747;
+    --text: #2a4262;
+    --dim: #4a6283;
+    --link: #1565c0;
+    --line: rgb(13 78 166 / .14);
+    --film: conic-gradient(from 210deg, rgb(255 255 255 / .95), rgb(255 181 226 / .85),
+      rgb(200 181 255 / .85), rgb(159 227 255 / .95), rgb(168 255 217 / .85), rgb(255 255 255 / .95));
+    --font: "Dusty Sans", "Dusty Fallback", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
   }
   * { box-sizing: border-box; }
-  html { -webkit-text-size-adjust: 100%; }
+  html { -webkit-text-size-adjust: 100%; text-size-adjust: 100%; background: #e4f3ff; }
   body {
     margin: 0;
-    background: var(--bg);
     color: var(--text);
-    font: 18px/1.6 system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+    font: 400 clamp(1rem, .96rem + .2vw, 1.125rem)/1.6 var(--font);
+    background:
+      radial-gradient(70vmax 50vmax at 0% 0%, rgb(255 255 255 / .8), transparent 70%),
+      radial-gradient(60vmax 50vmax at 100% 40%, rgb(174 232 252 / .45), transparent 70%),
+      linear-gradient(180deg, #ecf7ff, #dcefff 55%, #e5f4ff);
   }
-  main { max-width: 760px; margin: 0 auto; padding: 32px 16px 64px; }
-  h1 { font-size: 2rem; line-height: 1.2; margin: 0 0 4px; }
-  h2 { font-size: 1.3rem; margin: 40px 0 8px; padding-top: 8px; border-top: 1px solid var(--line); }
-  h3 { font-size: 1.05rem; margin: 24px 0 4px; }
+  main {
+    max-width: 760px; margin: 0 auto;
+    padding: calc(16px + env(safe-area-inset-top)) max(16px, env(safe-area-inset-left), env(safe-area-inset-right)) 64px;
+  }
+  .home { display: inline-block; margin: 4px 0 20px; border-radius: 12px; }
+  .home img { display: block; width: 132px; height: auto; }
+  h1, h2, h3 { color: var(--ink); font-weight: 600; text-wrap: balance; }
+  h1 { font-size: clamp(1.9rem, 1.5rem + 1.6vw, 2.5rem); line-height: 1.15; margin: 0 0 6px; letter-spacing: -.01em; }
+  h2 { font-size: 1.35rem; line-height: 1.25; margin: 44px 0 8px; padding-top: 14px; border-top: 1px solid var(--line); }
+  h3 { font-size: 1.08rem; line-height: 1.3; margin: 24px 0 4px; }
   p, li { margin: 8px 0; }
   ul { padding-left: 1.3em; }
-  a { color: var(--accent); overflow-wrap: anywhere; }
+  strong { font-weight: 600; color: var(--ink); }
+  a { color: var(--link); overflow-wrap: anywhere; text-underline-offset: .18em; }
+  a:hover { color: #035dc7; }
+  :focus-visible { outline: 3px solid #035dc7; outline-offset: 3px; border-radius: 4px; }
   .dim { color: var(--dim); }
-  .summary {
-    background: var(--summary);
-    border: 1px solid var(--summary-line);
-    border-radius: 16px;
-    padding: 8px 24px 16px;
-    margin: 24px 0 8px;
+  /* Clear sheets with the app's soap-film rim. */
+  .summary, .card { position: relative; background: rgb(255 255 255 / .55); box-shadow: 0 16px 36px -26px rgb(13 78 166 / .55), inset 0 1px 1px rgb(255 255 255 / .9); }
+  .summary::before, .card::before {
+    content: ""; position: absolute; inset: 0; border-radius: inherit; padding: 1.5px;
+    background: var(--film);
+    -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+    -webkit-mask-composite: xor;
+    mask: linear-gradient(#000 0 0) content-box exclude, linear-gradient(#000 0 0);
+    pointer-events: none;
   }
+  .summary { border-radius: 26px; padding: 8px 26px 16px; margin: 24px 0 8px; }
   .summary h2 { border: 0; margin-top: 16px; padding: 0; }
-  .card { background: var(--card); border: 1px solid var(--line); border-radius: 12px; padding: 4px 20px; margin: 12px 0; }
+  .card { border-radius: 18px; padding: 4px 20px; margin: 12px 0; }
   .card h3 { margin-top: 16px; }
   nav ol { columns: 2; column-gap: 32px; padding-left: 1.6em; }
-  @media (max-width: 560px) { nav ol { columns: 1; } body { font-size: 17px; } .summary { padding: 8px 16px 12px; } }
-  footer { margin-top: 48px; font-size: 0.9rem; }
+  footer { margin-top: 56px; padding-top: 18px; border-top: 1px solid var(--line); font-size: .9rem; }
+  @media (max-width: 560px) { nav ol { columns: 1; } .summary { padding: 8px 18px 12px; } .card { padding: 4px 16px; } }
 </style>
 </head>
 <body>
 <main>
+
+<a class="home" href="../"><picture><source type="image/avif" srcset="../img/logo-560.avif"><img src="../img/logo-560.webp" width="560" height="252" alt="Dusty home"></picture></a>
 
 <h1>Dusty Privacy Policy</h1>
 <p class="dim">Effective 13 November 2026 · Last updated 14 November 2026</p>
@@ -336,6 +358,7 @@
   Nerobe Interactive (Andrii Hnatovskyi), Ukraine</p>
 
 <footer class="dim">
+  <p><a href="../">Dusty home</a></p>
   <p>© 2026 Nerobe Interactive. Dusty is not affiliated with Meta. Meta Quest and Meta Horizon are
     trademarks of Meta Platforms, Inc.</p>
 </footer>

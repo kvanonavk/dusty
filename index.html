@@ -2,210 +2,1081 @@
 <html lang="en">
 <head>
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Dusty: mixed-reality cleaning for Meta Quest</title>
-<meta name="description" content="Dusty is a mixed-reality app for Meta Quest 3 and 3S. Grab your vacuum or mop, put on your headset, and let your floor transform.">
+<script>document.documentElement.classList.add('js')</script>
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Dusty: mixed-reality cleaning game for Meta Quest 3 and 3S</title>
+<meta name="description" content="Dusty turns cleaning into a mixed-reality game on Meta Quest 3 and 3S. Grab your vacuum or mop, and every move clears snow, autumn leaves or lava off your real floor.">
 <meta name="robots" content="index, follow">
-<meta property="og:title" content="Dusty: mixed-reality cleaning for Meta Quest">
-<meta property="og:description" content="Cleaning your home doesn't have to feel like a chore. Grab your vacuum or mop, put on your headset, and let your floor transform.">
+<link rel="canonical" href="https://dusty.nerobeinteractive.com/">
+<meta name="color-scheme" content="only light">
+<meta name="theme-color" content="#dff0ff">
 <meta property="og:type" content="website">
+<meta property="og:site_name" content="Dusty">
+<meta property="og:title" content="Dusty: your mixed-reality cleaning buddy">
+<meta property="og:description" content="Grab your vacuum or mop, put on your headset, and watch your floor transform. Coming soon on Meta Horizon.">
 <meta property="og:url" content="https://dusty.nerobeinteractive.com/">
 <meta property="og:image" content="https://dusty.nerobeinteractive.com/img/card.jpg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="The Dusty logo over a living room floor turning into grass, a lagoon and lava, with Mote the robot and dust bunnies">
 <meta name="twitter:card" content="summary_large_image">
 <link rel="icon" type="image/png" sizes="48x48" href="img/icon-48.png">
 <link rel="apple-touch-icon" href="img/icon-192.png">
-<!-- Self-contained on purpose: no fonts, scripts, cookies or trackers from anywhere else.
-     Published like the privacy page (docs/PRIVACY_POLICY.md "Hosting"). Its texts are the Store
-     listing's (docs/STORE_LISTING.md), word for word: change both together. -->
+<link rel="preload" href="fonts/DustySans-Semibold.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="fonts/DustySans-Regular.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" as="image" type="image/avif" media="(orientation: portrait)"
+      imagesrcset="img/hero-tall-600.avif 600w, img/hero-tall-900.avif 900w" imagesizes="151vw">
+<link rel="preload" as="image" type="image/avif" media="(orientation: landscape)"
+      imagesrcset="img/hero-wide-1086.avif 1086w, img/hero-wide-1448.avif 1448w, img/hero-wide-2172.avif 2172w"
+      imagesizes="(max-height: 520px) 337vh, (max-width: 1357px) 1552px, 115vw">
+<!-- Self-contained on purpose: no fonts, scripts, cookies or trackers from anywhere else (the
+     privacy page says so). Texts by the PMM; images and fonts come from tools/site/build.py.
+     docs/WEBSITE.md says how to make a "Coming soon" button live and how to publish. -->
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "VideoGame",
+  "name": "Dusty",
+  "url": "https://dusty.nerobeinteractive.com/",
+  "description": "A mixed-reality cleaning game for Meta Quest 3 and 3S: grab your vacuum or mop, and every move clears snow, autumn leaves or lava off your real floor.",
+  "image": "https://dusty.nerobeinteractive.com/img/card.jpg",
+  "genre": ["Casual", "Lifestyle"],
+  "gamePlatform": ["Meta Quest 3", "Meta Quest 3S"],
+  "applicationCategory": "Game",
+  "operatingSystem": "Meta Horizon OS",
+  "playMode": "SinglePlayer",
+  "inLanguage": ["en", "de", "es", "fr", "it"],
+  "author": {"@id": "#nerobe"},
+  "publisher": {
+    "@type": "Organization",
+    "@id": "#nerobe",
+    "name": "Nerobe Interactive",
+    "email": "support@nerobeinteractive.com",
+    "address": {"@type": "PostalAddress", "addressLocality": "Kyiv", "addressCountry": "UA"}
+  }
+}
+</script>
 <style>
+  @font-face {
+    font-family: "Dusty Sans";
+    src: url(fonts/DustySans-Regular.woff2) format("woff2");
+    font-weight: 400;
+    font-display: swap;
+  }
+  @font-face {
+    font-family: "Dusty Sans";
+    src: url(fonts/DustySans-Semibold.woff2) format("woff2");
+    font-weight: 600;
+    font-display: swap;
+  }
+  /* Arial shaped to Dusty Sans's width and line height (build.py prints these), so the swap
+     doesn't move anything. */
+  @font-face {
+    font-family: "Dusty Fallback";
+    src: local("Arial"), local("ArialMT"), local("Arimo"), local("Liberation Sans");
+    size-adjust: 108.4%;
+    ascent-override: 95.9%;
+    descent-override: 24.9%;
+    line-gap-override: 0%;
+  }
+  @property --p { syntax: "<percentage>"; inherits: true; initial-value: 115%; }
+
   :root {
-    --bg: #f4f8fd;
-    --card: #ffffff;
-    --text: #1d2433;
-    --dim: #566074;
-    --line: #dde3ec;
-    --accent: #1f6fd6;
-    --bubble: #e6f2ff;
-    --bubble-line: #b9d6fb;
+    /* The wordmark's blues, measured off it (deep rim to highlight). */
+    --logo-deep: #035dc7;
+    --logo-rim: #0586e6;
+    --logo: #3ebcfb;
+    --logo-light: #72d4fb;
+    --logo-pale: #aee8fc;
+    --deep: #061634;
+    --ink: #0f2747;
+    --text: #2a4262;
+    --dim: #4a6283;
+    --link: #1565c0;
+    --gold: #ffc94d;
+    /* The app's soap-film rim: white, pink, lilac, sky, mint. */
+    --film: conic-gradient(from 210deg, rgb(255 255 255 / .95), rgb(255 181 226 / .85),
+      rgb(200 181 255 / .85), rgb(159 227 255 / .95), rgb(168 255 217 / .85), rgb(255 255 255 / .95));
+    --font: "Dusty Sans", "Dusty Fallback", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+    --gutter: max(16px, 4vw, env(safe-area-inset-left), env(safe-area-inset-right));
+    --wrap: min(1120px, 100% - 2 * var(--gutter));
+    --hero-h: clamp(460px, 33.9vw, min(86vh, 820px));
+    --art-w: max(100vw, var(--hero-h) * 3.373);
+    /* Wave edges: one smooth period each (the ends meet), repeated along the edge; the top and
+       bottom ones of different lengths, so the band never looks stamped. */
+    --wave-top: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 360 28'%3E%3Cpath d='M0 14C45 3 135 3 180 14S315 25 360 14V28H0Z'/%3E%3C/svg%3E");
+    --wave-bottom: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 300 28'%3E%3Cpath d='M0 14C37.5 25 112.5 25 150 14S262.5 3 300 14V0H0Z'/%3E%3C/svg%3E");
+    /* The wordmark's own sparkles, cut from it by build.py (as the trailer's titles use them). On
+       the light page their rim gets a tight blue shadow and a soft glow, so they read when small. */
+    --spark-glow: drop-shadow(0 0 .6px #0586e6) drop-shadow(0 0 .6px #0586e6) drop-shadow(0 0 5px rgb(77 210 249 / .7));
+    --gold-glow: drop-shadow(0 0 .6px #d48f00) drop-shadow(0 0 .6px #d48f00) drop-shadow(0 0 4px rgb(255 201 77 / .85));
+    --spark: url(img/sparkle-144.webp);
+    --spark-small: url(img/sparkle-small-64.webp);
+    --spark-gold: url(img/sparkle-gold-96.webp);
+    --ease-pop: cubic-bezier(.34, 1.56, .64, 1);
   }
-  @media (prefers-color-scheme: dark) {
-    :root {
-      --bg: #10141c;
-      --card: #171d28;
-      --text: #e7ecf4;
-      --dim: #a3adbf;
-      --line: #2a3344;
-      --accent: #7db3ff;
-      --bubble: #16253b;
-      --bubble-line: #2b4a75;
-    }
+  @supports (height: 1svh) {
+    :root { --hero-h: clamp(460px, 33.9vw, min(86svh, 820px)); }
   }
-  * { box-sizing: border-box; }
-  html { -webkit-text-size-adjust: 100%; }
+
+  *, *::before, *::after { box-sizing: border-box; }
+  html { -webkit-text-size-adjust: 100%; text-size-adjust: 100%; background: #e4f3ff; }
   body {
     margin: 0;
-    background: var(--bg);
+    min-height: 100vh;
+    overflow-x: hidden;
+    overflow-x: clip;
+    font: 400 clamp(1rem, .96rem + .2vw, 1.125rem)/1.6 var(--font);
     color: var(--text);
-    font: 18px/1.6 system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+    background:
+      radial-gradient(70vmax 50vmax at 0% 0%, rgb(255 255 255 / .8), transparent 70%),
+      radial-gradient(60vmax 50vmax at 100% 38%, rgb(174 232 252 / .5), transparent 70%),
+      radial-gradient(70vmax 60vmax at 0% 78%, rgb(114 212 251 / .22), transparent 70%),
+      linear-gradient(180deg, #ecf7ff, #dcefff 55%, #e5f4ff);
   }
-  main { max-width: 1000px; margin: 0 auto; padding: 24px 16px 64px; }
-  .hero { margin: 0; }
-  .hero img {
-    display: block;
-    width: 100%;
-    height: auto;
-    aspect-ratio: 16 / 9;
-    border-radius: 28px;
-    border: 1px solid var(--line);
+  img { max-width: 100%; }
+  a { color: var(--link); text-underline-offset: .18em; }
+  a:hover { color: var(--logo-deep); }
+  strong, b { font-weight: 600; }
+  :focus-visible { outline: 3px solid var(--logo-deep); outline-offset: 3px; border-radius: 4px; }
+  .sr-only {
+    position: absolute; width: 1px; height: 1px; margin: -1px; padding: 0; overflow: hidden;
+    clip: rect(0 0 0 0); white-space: nowrap; border: 0;
   }
-  .intro { max-width: 720px; margin: 0 auto; text-align: center; }
-  h1 { font-size: 2.2rem; line-height: 1.2; margin: 36px 0 12px; letter-spacing: -0.01em; }
-  .lead { font-size: 1.2rem; margin: 0 0 12px; }
-  .intro p { margin: 0 0 20px; }
-  .pill {
-    display: inline-block;
-    background: var(--bubble);
-    border: 1px solid var(--bubble-line);
-    border-radius: 999px;
-    padding: 8px 20px;
-    margin: 0;
-    font-weight: 600;
+
+  /* ---------- background bubbles ---------- */
+  .bubbles {
+    position: fixed; inset: 0; z-index: -1; overflow: hidden; pointer-events: none; contain: strict;
   }
-  h2 { font-size: 1.5rem; line-height: 1.25; margin: 56px 0 8px; text-align: center; }
-  .sub { max-width: 720px; margin: 0 auto 8px; text-align: center; color: var(--dim); }
-  .grid {
+  .bubbles i {
+    position: absolute; left: var(--x); top: 100%;
+    width: var(--s); height: var(--s); border-radius: 50%;
+    background:
+      radial-gradient(circle at 31% 27%, rgb(255 255 255 / .95) 0 5%, rgb(255 255 255 / 0) 15%),
+      radial-gradient(circle at 70% 76%, rgb(255 255 255 / .55) 0 3%, rgb(255 255 255 / 0) 9%),
+      radial-gradient(circle, rgb(255 255 255 / 0) 55%, rgb(159 227 255 / .32) 66%, rgb(200 181 255 / .28) 76%,
+        rgb(255 181 226 / .24) 85%, rgb(255 255 255 / .8) 95%, rgb(255 255 255 / 0) 100%);
+    opacity: var(--o, .5);
+    animation: rise var(--d, 60s) linear var(--delay, 0s) infinite;
+    will-change: transform;
+  }
+  @keyframes rise {
+    0% { transform: translate3d(0, 0, 0); }
+    50% { transform: translate3d(var(--sway, 30px), calc(-60vh - var(--s)), 0); }
+    100% { transform: translate3d(0, calc(-120vh - 2 * var(--s)), 0); }
+  }
+
+  /* ---------- bubble buttons (the app's: a soap film with a rim of colours) ---------- */
+  .bubble {
+    --tint: 205 228 250;
+    --hx: 32%;
+    --hy: 18%;
+    position: relative;
+    isolation: isolate;
+    display: inline-flex; align-items: center; justify-content: center; gap: .55em;
+    min-height: 56px; padding: 0 1.8em;
+    border: 0; border-radius: 999px;
+    font: 600 clamp(1.02rem, .96rem + .25vw, 1.15rem)/1.1 var(--font);
+    letter-spacing: .01em;
+    color: var(--ink);
+    text-decoration: none; white-space: nowrap; cursor: pointer;
+    -webkit-tap-highlight-color: transparent; touch-action: manipulation; user-select: none;
+    background:
+      radial-gradient(85% 130% at var(--hx) var(--hy), rgb(255 255 255 / .92), rgb(255 255 255 / 0) 48%),
+      linear-gradient(180deg, rgb(255 255 255 / .8), rgb(var(--tint) / .55) 68%, rgb(var(--tint) / .85));
+    box-shadow:
+      inset 0 2px 2px rgb(255 255 255 / .95),
+      inset 0 -10px 16px -6px rgb(var(--tint) / .95),
+      0 12px 24px -12px rgb(13 78 166 / .55),
+      0 2px 5px rgb(13 78 166 / .14);
+    -webkit-backdrop-filter: blur(8px) saturate(1.3);
+    backdrop-filter: blur(8px) saturate(1.3);
+    transform: translate(var(--lx, 0px), var(--ly, 0px));
+    transition: transform .35s var(--ease-pop), scale .35s var(--ease-pop), box-shadow .3s;
+    animation: float 5.5s ease-in-out var(--fd, 0s) infinite;
+  }
+  .bubble::before {
+    content: ""; position: absolute; inset: 0; z-index: -1;
+    border-radius: inherit; padding: 1.6px;
+    background: var(--film);
+    -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+    -webkit-mask-composite: xor;
+    mask: linear-gradient(#000 0 0) content-box exclude, linear-gradient(#000 0 0);
+    pointer-events: none;
+  }
+  .bubble::after {
+    content: ""; position: absolute; top: 13%; left: 8%;
+    width: 1.5em; height: .5em; border-radius: 50%;
+    background: radial-gradient(closest-side, rgb(255 255 255 / .95), rgb(255 255 255 / 0));
+    rotate: -10deg;
+    translate: var(--dx, 0px) var(--dy, 0px);
+    transition: translate .35s var(--ease-pop);
+    pointer-events: none;
+  }
+  .bubble svg { width: 1.05em; height: 1.05em; flex: none; }
+  .bubble-primary {
+    --tint: 18 132 228;
+    color: #fff;
+    text-shadow: 0 1px 1px rgb(6 22 52 / .3), 0 2px 8px rgb(6 22 52 / .35);
+    background:
+      radial-gradient(85% 130% at var(--hx) var(--hy), rgb(255 255 255 / .65), rgb(255 255 255 / 0) 48%),
+      linear-gradient(180deg, #a6e3ff, #4fc1fb 36%, #1d97ee 76%, #0f7fde);
+  }
+  @media (hover: hover) and (pointer: fine) {
+    .bubble:hover { scale: 1.04; }
+  }
+  .bubble:active { scale: 1.04 .93; transition-duration: .08s; }
+  .bubble:focus-visible { outline: 3px solid var(--logo-deep); outline-offset: 4px; border-radius: 999px; }
+  @keyframes float { 0%, 100% { translate: 0 0; } 50% { translate: 0 -3px; } }
+
+  /* Not there yet: paler, with a "Coming soon" tag; a press wobbles it. */
+  .bubble.is-soon { --tint: 200 214 230; color: #536987; cursor: default; }
+  .bubble-primary.is-soon {
+    color: #fff;
+    background:
+      radial-gradient(85% 130% at var(--hx) var(--hy), rgb(255 255 255 / .6), rgb(255 255 255 / 0) 48%),
+      linear-gradient(180deg, #cbe6f7, #9ccbec 40%, #78afdc 80%, #6aa2d3);
+  }
+  .bubble.is-soon:hover { scale: 1; }
+  .soon-tag {
+    position: absolute; top: -12px; right: -4px;
+    padding: .45em .8em .38em; border-radius: 999px;
+    font: 600 max(.62em, 10.5px)/1 var(--font); letter-spacing: .07em; text-transform: uppercase;
+    color: #5b3d00; text-shadow: none;
+    background: linear-gradient(180deg, #ffe8a8, var(--gold));
+    box-shadow: inset 0 1px 1px rgb(255 255 255 / .8), 0 4px 10px -4px rgb(120 80 0 / .55);
+    rotate: 5deg;
+  }
+  .bubble.is-wobble { animation: wobble .5s ease; }
+  .bubble.is-wobble .soon-tag { animation: tag-bounce .5s var(--ease-pop); }
+  @keyframes wobble {
+    20% { transform: translateX(-5px) rotate(-1.5deg); }
+    40% { transform: translateX(5px) rotate(1.5deg); }
+    60% { transform: translateX(-3px) rotate(-.6deg); }
+    80% { transform: translateX(2px); }
+  }
+  @keyframes tag-bounce { 40% { scale: 1.25; } }
+
+  .pop-ring {
+    position: absolute; inset: -3px; border-radius: inherit;
+    border: 2px solid rgb(255 255 255 / .95);
+    box-shadow: 0 0 12px rgb(159 227 255 / .9);
+    animation: ring .34s ease-out forwards; pointer-events: none;
+  }
+  @keyframes ring { to { opacity: 0; transform: scale(1.15, 1.6); } }
+  .drop {
+    position: absolute; width: 8px; height: 8px; margin: -4px 0 0 -4px; border-radius: 50%;
+    background: radial-gradient(circle at 35% 30%, #fff, rgb(159 227 255 / .75));
+    box-shadow: 0 0 4px rgb(255 255 255 / .9);
+    animation: drop .42s ease-out forwards; pointer-events: none;
+  }
+  @keyframes drop { to { transform: translate(var(--tx), var(--ty)) scale(.2); opacity: 0; } }
+
+  /* ---------- hero: portrait first (logo, art, tagline, buttons), then over the art ---------- */
+  .hero {
+    position: relative;
     display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    gap: 16px;
-    margin: 24px 0 0;
-    padding: 0;
-    list-style: none;
+    justify-items: center;
   }
-  .grid li {
-    background: var(--card);
-    border: 1px solid var(--line);
-    border-radius: 20px;
-    padding: 20px 22px;
-    margin: 0;
+  /* Portrait: the art at the very top, the logo resting on its wavy lower edge. */
+  .hero-logo {
+    grid-row: 2; position: relative; z-index: 2;
+    width: min(78vw, 460px); margin: calc(-.17 * min(78vw, 460px)) 0 0; line-height: 0;
   }
-  .grid h3 { font-size: 1.1rem; margin: 0 0 6px; }
-  .grid p { margin: 0 0 8px; color: var(--dim); font-size: 1rem; line-height: 1.5; }
-  .grid p:last-child { margin-bottom: 0; }
-  .need {
-    max-width: 720px;
-    margin: 24px auto 0;
-    background: var(--bubble);
-    border: 1px solid var(--bubble-line);
-    border-radius: 20px;
-    padding: 12px 28px 16px;
+  @media (orientation: portrait) {
+    .hero-logo img { filter: drop-shadow(0 8px 14px rgb(6 22 52 / .2)); }
   }
-  .need ol { padding-left: 1.4em; margin: 8px 0; }
-  .need li { margin: 6px 0; }
-  .center { max-width: 720px; margin: 16px auto 0; text-align: center; }
-  a { color: var(--accent); overflow-wrap: anywhere; }
+  .hero-logo picture, .hero-logo img { display: block; width: 100%; height: auto; }
+  .hero-logo .lift { position: relative; animation: inflate 1s var(--ease-pop) both, bob 6s ease-in-out 1s infinite; }
+  @keyframes inflate {
+    0% { opacity: 0; scale: .55; }
+    55% { opacity: 1; scale: 1.06 1.02; }
+    75% { scale: .98 1.01; }
+    100% { opacity: 1; scale: 1; }
+  }
+  @keyframes bob { 0%, 100% { translate: 0 0; rotate: 0deg; } 50% { translate: 0 -6px; rotate: -.6deg; } }
+  /* A light sweeping over the letters now and then (masked by the logo's own shape). */
+  .hero-logo .lift::after {
+    content: ""; position: absolute; inset: 0; pointer-events: none; opacity: 0;
+    background: linear-gradient(105deg, transparent 38%, rgb(255 255 255 / .85) 50%, transparent 62%) no-repeat;
+    background-size: 260% 100%;
+    background-position: 130% 0;
+    -webkit-mask: url(img/logo-560.webp) center / 100% 100% no-repeat;
+    mask: url(img/logo-560.webp) center / 100% 100% no-repeat;
+  }
+  .shine-on .lift::after { opacity: 1; animation: shine 7s ease-in-out 1.2s infinite; }
+  @keyframes shine {
+    0% { background-position: 130% 0; }
+    22%, 100% { background-position: -30% 0; }
+  }
+
+  .hero-art {
+    grid-row: 1; position: relative; z-index: 1;
+    width: 100%; height: min(108vw, 56vh);
+    -webkit-mask: linear-gradient(#000 0 0) 0 0 / 100% calc(100% - 27px) no-repeat,
+      var(--wave-bottom) 0 100% / 300px 28px repeat-x;
+    mask: linear-gradient(#000 0 0) 0 0 / 100% calc(100% - 27px) no-repeat,
+      var(--wave-bottom) 0 100% / 300px 28px repeat-x;
+    overflow: hidden;
+  }
+  @supports (height: 1svh) { .hero-art { height: min(108vw, 56svh); } }
+  .hero-art img {
+    display: block; width: 100%; height: 100%;
+    object-fit: cover; object-position: 40% 50%;
+    animation: settle 1.8s cubic-bezier(.2, .7, .2, 1) both;
+  }
+  @keyframes settle { from { scale: 1.07; } to { scale: 1; } }
+  .tagline {
+    grid-row: 3; position: relative; z-index: 2;
+    margin: 14px var(--gutter) 0; max-width: 16em;
+    font: 600 clamp(1.5rem, 1.2rem + 1.5vw, 2.1rem)/1.18 var(--font);
+    color: var(--ink); text-align: center; letter-spacing: -.005em;
+    text-wrap: balance;
+  }
+  .hero-actions {
+    grid-row: 4; position: relative; z-index: 2;
+    display: flex; flex-direction: column; gap: 14px;
+    width: min(420px, 100% - 2 * var(--gutter));
+    margin: 22px auto 48px;
+  }
+  @media (orientation: portrait) and (min-width: 560px) {
+    .hero-actions { flex-direction: row; justify-content: center; width: auto; }
+    .hero-actions .bubble { min-width: 230px; }
+  }
+
+  @media (orientation: landscape) {
+    .hero {
+      height: var(--hero-h);
+      padding: 0;
+      grid-template-rows: auto auto 1fr auto;
+      overflow: hidden;
+    }
+    .hero-art {
+      grid-row: 1 / -1; grid-column: 1;
+      width: auto; height: auto; justify-self: stretch; align-self: stretch;
+      margin: 0; -webkit-mask: none; mask: none;
+    }
+    .hero-art img { object-position: 50% 50%; }
+    @supports (animation-timeline: scroll()) {
+      .hero-art img {
+        animation: settle 1.8s cubic-bezier(.2, .7, .2, 1) both, drift linear both;
+        animation-timeline: auto, scroll(root);
+        animation-range: normal, 0 100vh;
+      }
+      @keyframes drift { to { translate: 0 14%; } }
+    }
+    /* The logo where the key art has it: a fifth of the art wide, just right of Mote. */
+    .hero-logo {
+      grid-row: 1; grid-column: 1;
+      width: min(calc(var(--art-w) * .2), 720px);
+      margin-top: calc(var(--hero-h) * .065);
+      translate: calc(var(--art-w) * .018) 0;
+    }
+    .tagline {
+      grid-row: 2; grid-column: 1;
+      margin: calc(var(--hero-h) * .012) 0 0; max-width: 10.5em;
+      translate: calc(var(--art-w) * .018) 0;
+      font-size: clamp(1.35rem, calc(var(--art-w) * .0175), 3.2rem);
+      color: #fff;
+      text-shadow: 0 1px 2px rgb(6 22 52 / .5), 0 2px 10px rgb(6 22 52 / .45), 0 0 28px rgb(6 22 52 / .35);
+    }
+    .tagline::before {
+      content: ""; position: absolute; inset: -18% -12%; z-index: -1;
+      background: radial-gradient(closest-side, rgb(6 22 52 / .32), rgb(6 22 52 / 0));
+    }
+    .hero-actions {
+      grid-row: 4; grid-column: 1;
+      flex-direction: row; justify-content: center; width: auto;
+      gap: clamp(28px, calc(var(--art-w) * .16), 460px);
+      margin: 0 0 calc(var(--hero-h) * .12 + 18px);
+      translate: calc(var(--art-w) * .012) 0;
+    }
+    /* On big screens the buttons grow with the art. */
+    .hero-actions .bubble {
+      font-size: clamp(1.02rem, calc(var(--art-w) * .0078), 1.55rem);
+      min-height: clamp(52px, calc(var(--art-w) * .026), 76px);
+    }
+  }
+  @media (orientation: landscape) and (max-height: 520px) {
+    :root { --hero-h: 100vh; }
+    @supports (height: 1svh) { :root { --hero-h: 100svh; } }
+    .hero-logo { width: calc(var(--art-w) * .17); margin-top: calc(var(--hero-h) * .06 + env(safe-area-inset-top)); }
+    .tagline { font-size: clamp(1.15rem, 5.6vh, 1.6rem); }
+    .hero-actions { margin-bottom: calc(var(--hero-h) * .1 + 18px); gap: clamp(20px, calc(var(--art-w) * .14), 300px); }
+    .hero-actions .bubble { min-height: 46px; padding: 0 1.4em; font-size: 1rem; }
+  }
+
+  /* ---------- "Coming soon on Meta Horizon" band ---------- */
+  .band {
+    position: relative; z-index: 3;
+    margin-top: 26px;
+    padding: 16px var(--gutter);
+    color: #fff;
+    background: linear-gradient(90deg, #0a4bb2, #1670dc 50%, #0a4bb2);
+  }
+  .band::before, .band::after {
+    content: ""; position: absolute; left: 0; right: 0; height: 28px; background: inherit;
+  }
+  .band::before {
+    bottom: calc(100% - 1px);
+    -webkit-mask: var(--wave-top) 0 0 / 360px 28px repeat-x;
+    mask: var(--wave-top) 0 0 / 360px 28px repeat-x;
+  }
+  .band::after {
+    top: calc(100% - 1px);
+    -webkit-mask: var(--wave-bottom) 0 0 / 300px 28px repeat-x;
+    mask: var(--wave-bottom) 0 0 / 300px 28px repeat-x;
+  }
+  @media (orientation: landscape) { .band { margin-top: 0; } }
+  .band p {
+    position: relative; z-index: 1; margin: 0;
+    display: flex; flex-wrap: wrap; align-items: center; justify-content: center; gap: 10px 18px;
+    font: 600 clamp(1rem, .82rem + .9vw, 1.5rem)/1.2 var(--font);
+    letter-spacing: .12em; text-transform: uppercase;
+    text-shadow: 0 1px 2px rgb(6 22 52 / .35);
+  }
+  .band .pill {
+    display: inline-flex; align-items: center;
+    padding: 9px 18px 8px; border-radius: 999px;
+    background: linear-gradient(180deg, #fff, #eef6ff);
+    box-shadow: inset 0 -3px 6px rgb(13 78 166 / .14), 0 6px 14px -6px rgb(0 0 0 / .4);
+  }
+  .band .pill img { display: block; height: clamp(18px, .9rem + .7vw, 28px); width: auto; }
+  .band-shine {
+    position: absolute; left: 0; right: 0; top: -27px; bottom: -27px; overflow: hidden; pointer-events: none;
+    -webkit-mask: var(--wave-top) 0 0 / 360px 28px repeat-x,
+      linear-gradient(#000 0 0) 0 27px / 100% calc(100% - 54px) no-repeat,
+      var(--wave-bottom) 0 100% / 300px 28px repeat-x;
+    mask: var(--wave-top) 0 0 / 360px 28px repeat-x,
+      linear-gradient(#000 0 0) 0 27px / 100% calc(100% - 54px) no-repeat,
+      var(--wave-bottom) 0 100% / 300px 28px repeat-x;
+  }
+  .band-shine::before {
+    content: ""; position: absolute; top: 0; bottom: 0; left: 0; width: 34%;
+    background: linear-gradient(100deg, transparent, rgb(255 255 255 / .22) 50%, transparent);
+    transform: translateX(-110%);
+    animation: band-shine 8s ease-in-out 2.4s infinite;
+  }
+  @keyframes band-shine { 0% { transform: translateX(-110%); } 25%, 100% { transform: translateX(310%); } }
+
+  /* ---------- sections ---------- */
+  /* Decorations may hang over a picture's edge, never past the screen's. */
+  main { display: block; overflow-x: hidden; overflow-x: clip; }
+  .section {
+    position: relative;
+    width: var(--wrap); margin-inline: auto;
+    padding-top: clamp(60px, 7vw, 96px);
+  }
+  h2 {
+    margin: 0 0 .45em;
+    font: 600 clamp(1.8rem, 1.3rem + 2vw, 2.75rem)/1.15 var(--font);
+    color: var(--ink); letter-spacing: -.01em;
+    text-wrap: balance;
+  }
+  p { margin: 0; text-wrap: pretty; }
+
+  /* Headings come in like the trailer's titles: a sparkle glides along and the letters appear
+     behind it, the way the floor appears behind the tool; then the wordmark's two sparkles. */
+  .sweep { position: relative; width: fit-content; }
+  .sweep-text {
+    -webkit-mask-image: linear-gradient(90deg, #000 calc(var(--p) - 14%), transparent var(--p));
+    mask-image: linear-gradient(90deg, #000 calc(var(--p) - 14%), transparent var(--p));
+  }
+  .sweep::before {
+    content: ""; position: absolute; top: .3em; left: calc(var(--p) - .3em);
+    width: .52em; height: .55em; opacity: 0; pointer-events: none;
+    background: var(--spark) center / contain no-repeat;
+    filter: var(--spark-glow) drop-shadow(0 0 .12em rgb(77 210 249 / .95));
+  }
+  .js .sweep:not(.is-in) { --p: -15%; }
+  .sweep.is-in { animation: sweep 1.2s cubic-bezier(.45, .1, .3, 1) both; }
+  .sweep.is-in::before { animation: glide 1.2s cubic-bezier(.45, .1, .3, 1) both; }
+  @keyframes sweep { from { --p: -15%; } to { --p: 115%; } }
+  @keyframes glide { 0% { opacity: 0; } 12%, 80% { opacity: 1; } 100% { opacity: 0; } }
+
+  /* The pair as on the wordmark: the big one half a size tall by the capitals' top, the small one
+     0.63 of it, its centre 0.62 of the big one's height to the right and 0.41 lower. No width of its
+     own, so it never wraps onto a line by itself: it hangs after the last word. */
+  .pair { position: relative; display: inline-block; width: .82em; height: 1em; margin: 0 -.96em 0 .14em; vertical-align: top; }
+  .pair i { position: absolute; display: block; background: center / contain no-repeat; filter: var(--spark-glow); }
+  .pair i:first-child { left: 0; top: .14em; width: .55em; height: .58em; background-image: var(--spark); }
+  .pair i:last-child { left: .44em; top: .5em; width: .37em; height: .37em; background-image: var(--spark-small); }
+  .pair i { animation: twinkle 3.8s ease-in-out infinite; }
+  .pair i:last-child { animation-delay: 1.3s; }
+  .js .sweep:not(.is-in) .pair i { opacity: 0; scale: .2; }
+  .js .sweep.is-in .pair i { animation: spark-in .5s var(--ease-pop) 1s both, twinkle 3.8s ease-in-out 1.6s infinite; }
+  .js .sweep.is-in .pair i:last-child { animation-delay: 1.15s, 2.9s; }
+  @keyframes spark-in { from { opacity: 0; scale: .2; rotate: -40deg; } to { opacity: 1; scale: 1; rotate: 0deg; } }
+  @keyframes twinkle { 0%, 100% { scale: 1; opacity: 1; } 50% { scale: .72; opacity: .65; } }
+
+  .spark {
+    position: absolute; z-index: 3; width: var(--s, 22px); height: var(--s, 22px); pointer-events: none;
+    background: var(--spark) center / contain no-repeat;
+    filter: var(--spark-glow);
+    animation: twinkle 4.2s ease-in-out var(--delay, 0s) infinite;
+  }
+  .spark.small { background-image: var(--spark-small); }
+
+  /* Rise in / pop in as they come into view (JS adds .is-in; with no JS all is just there). */
+  .js [data-reveal="up"]:not(.is-in) { opacity: 0; translate: 0 22px; }
+  .js [data-reveal="pop"]:not(.is-in) { opacity: 0; scale: .9; }
+  [data-reveal="up"] { transition: opacity .7s ease, translate .8s cubic-bezier(.2, .7, .2, 1); transition-delay: var(--rd, 0s); }
+  [data-reveal="pop"] { transition: opacity .5s ease, scale .9s var(--ease-pop); transition-delay: var(--rd, 0s); }
+  /* If the script never runs, show everything after a moment anyway. */
+  .js:not(.reveal-on) [data-reveal]:not(.is-in) { animation: failsafe .01s 2.5s forwards; }
+  @keyframes failsafe { to { opacity: 1; translate: none; scale: none; --p: 115%; } }
+
+  /* Zigzag: text then image in portrait on phones and tablets; side by side, alternating, from
+     900 px, and on phones turned sideways (a picture as wide as the screen would be taller than it). */
+  .split { display: grid; gap: 30px; text-align: center; }
+  .split-text { position: relative; max-width: 34rem; margin-inline: auto; }
+  .split-text .sweep { margin-inline: auto; }
+  .split-text p + p { margin-top: .8em; }
+  .shot { position: relative; margin: 0; border-radius: clamp(22px, 2.6vw, 32px); }
+  .shot picture, .photo picture { display: block; border-radius: inherit; }
+  .shot img {
+    display: block; width: 100%; height: auto; aspect-ratio: 16 / 10; object-fit: cover;
+    border-radius: inherit;
+    box-shadow: 0 26px 50px -22px rgb(13 78 166 / .55), 0 3px 8px rgb(13 78 166 / .14);
+    background: #bfdcf5;
+  }
+  /* The picture sits in a soap film: a rim of colours and a soft highlight. */
+  .shot::before, .photo::before {
+    content: ""; position: absolute; inset: 0; z-index: 2; border-radius: inherit; padding: 3px;
+    background: var(--film);
+    -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+    -webkit-mask-composite: xor;
+    mask: linear-gradient(#000 0 0) content-box exclude, linear-gradient(#000 0 0);
+    pointer-events: none;
+  }
+  .shot::after, .photo::after {
+    content: ""; position: absolute; inset: 0; z-index: 1; border-radius: inherit; pointer-events: none;
+    background:
+      radial-gradient(60% 40% at 18% 8%, rgb(255 255 255 / .38), rgb(255 255 255 / 0) 70%),
+      linear-gradient(180deg, rgb(255 255 255 / .1), rgb(255 255 255 / 0) 30%);
+    box-shadow: inset 0 0 0 1px rgb(255 255 255 / .35), inset 0 -18px 40px -24px rgb(6 22 52 / .45);
+  }
+  @media (min-width: 900px), (orientation: landscape) and (min-width: 640px) {
+    .split {
+      grid-template-columns: minmax(0, 1fr) minmax(0, 1.15fr);
+      align-items: center; gap: clamp(36px, 6vw, 88px); text-align: left;
+    }
+    .split-text { margin: 0; }
+    .split-text .sweep { margin-inline: 0; }
+    .split-flip { grid-template-columns: minmax(0, 1.15fr) minmax(0, 1fr); }
+    .split-flip .shot { grid-column: 1; grid-row: 1; }
+    .split-flip .split-text { grid-column: 2; }
+    .shot { rotate: 1.4deg; }
+    .split-flip .shot { rotate: -1.4deg; }
+  }
+
+  .cta { display: flex; justify-content: center; padding-top: clamp(48px, 6vw, 72px); }
+
+  /* More about Dusty */
+  .more h2 { margin-inline: auto; }
+  .features {
+    list-style: none; margin: 30px auto 0; padding: 0; max-width: 34rem;
+    display: grid; gap: 22px 56px;
+  }
+  .features li { display: grid; grid-template-columns: 80px minmax(0, 1fr); gap: 18px; align-items: center; }
+  .features p { font-size: clamp(1rem, .97rem + .15vw, 1.08rem); line-height: 1.5; color: var(--text); }
+  .icon-bubble {
+    position: relative; display: grid; place-items: center;
+    width: 80px; height: 80px; border-radius: 50%;
+    background:
+      radial-gradient(circle at 34% 28%, rgb(255 255 255 / .95) 0 6%, rgb(255 255 255 / 0) 22%),
+      radial-gradient(circle, rgb(255 255 255 / .55) 0 52%, rgb(214 236 255 / .5) 74%, rgb(255 255 255 / .75) 96%);
+    box-shadow: 0 10px 22px -12px rgb(13 78 166 / .5);
+    animation: bob 5s ease-in-out var(--fd, 0s) infinite;
+  }
+  .icon-bubble::before {
+    content: ""; position: absolute; inset: 0; border-radius: 50%; padding: 1.6px;
+    background: var(--film);
+    -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+    -webkit-mask-composite: xor;
+    mask: linear-gradient(#000 0 0) content-box exclude, linear-gradient(#000 0 0);
+  }
+  .icon-bubble img { position: relative; width: 60px; height: 60px; }
+  @media (min-width: 760px) {
+    .more h2 { margin-inline: 0; }
+    .features { grid-template-columns: 1fr 1fr; max-width: none; margin-left: 0; }
+  }
+  @media (max-width: 759px) { .more { text-align: center; } .features li { text-align: left; } }
+
+  /* Your home stays yours */
+  .sheet {
+    position: relative;
+    padding: clamp(22px, 3.2vw, 38px) clamp(20px, 3.6vw, 44px);
+    border-radius: clamp(24px, 2.6vw, 32px);
+    background:
+      radial-gradient(60% 80% at 12% 0%, rgb(255 255 255 / .7), rgb(255 255 255 / 0) 70%),
+      rgb(255 255 255 / .46);
+    box-shadow: 0 20px 44px -28px rgb(13 78 166 / .55), inset 0 1px 1px rgb(255 255 255 / .9);
+  }
+  .sheet::before {
+    content: ""; position: absolute; inset: 0; border-radius: inherit; padding: 1.6px;
+    background: var(--film);
+    -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+    -webkit-mask-composite: xor;
+    mask: linear-gradient(#000 0 0) content-box exclude, linear-gradient(#000 0 0);
+    pointer-events: none;
+  }
+  .yours { display: grid; gap: 14px 26px; align-items: center; text-align: center; }
+  .yours .icon-bubble { margin-inline: auto; }
+  .yours h2 { margin-inline: auto; margin-bottom: .3em; }
+  @media (min-width: 640px) {
+    .yours { grid-template-columns: 80px minmax(0, 1fr); text-align: left; }
+    .yours h2 { margin-inline: 0; }
+  }
+
+  /* About us: text, button, photo in portrait; the photo beside it as the zigzag does. */
+  .about { display: grid; gap: 34px; text-align: center; }
+  .about-text p { max-width: 40rem; margin-inline: auto; }
+  .about-text .sweep { margin-inline: auto; }
+  /* Contact us opens a card with the address: a mailto link alone does nothing on a computer
+     without an email app set up (Windows asks which app, and a browser can't take it). */
+  .contact { margin-top: 28px; }
+  .contact-card { margin: 18px auto 0; padding: 18px 22px 20px; max-width: 30rem; text-align: center; animation: card-in .45s var(--ease-pop) both; }
+  .contact-card[hidden] { display: none; }
+  .contact-card p { margin: 0 0 14px; }
+  .contact-card p a { font-weight: 600; }
+  .contact-actions { display: flex; flex-wrap: wrap; gap: 12px; justify-content: center; }
+  .contact-actions .bubble { min-height: 46px; padding: 0 1.3em; font-size: 1rem; }
+  .contact-actions [data-copy] { min-width: 9.6em; } /* the same width when it says "Copied!" */
+  @keyframes card-in { from { opacity: 0; scale: .94; translate: 0 -8px; } }
+  .photo { position: relative; margin: 0 auto; width: min(290px, 74vw); border-radius: 28px; rotate: -2.2deg; }
+  .photo img {
+    display: block; width: 100%; height: auto; aspect-ratio: 3 / 4; object-fit: cover;
+    border-radius: inherit; background: #d9c8b4;
+    box-shadow: 0 26px 50px -22px rgb(13 78 166 / .55), 0 3px 8px rgb(13 78 166 / .14);
+  }
+  @media (min-width: 900px), (orientation: landscape) and (min-width: 640px) {
+    .about { grid-template-columns: minmax(220px, 290px) minmax(0, 1fr); align-items: center; gap: clamp(40px, 6vw, 84px); text-align: left; }
+    .about .photo { grid-column: 1; grid-row: 1; width: 100%; }
+    .about-text { grid-column: 2; }
+    .about-text p { margin-inline: 0; }
+    .about-text .sweep { margin-inline: 0; }
+    .contact-card { margin-left: 0; text-align: left; }
+    .contact-actions { justify-content: flex-start; }
+  }
+
+  /* ---------- crumbs: decorations, and a little game ---------- */
+  .crumb {
+    position: absolute; z-index: 4;
+    width: var(--s, 40px); height: var(--s, 40px);
+    background: url(img/crumbs-192.webp) center / contain no-repeat;
+    background-image: image-set(url(img/crumbs-96.webp) 1x, url(img/crumbs-192.webp) 2x);
+    rotate: var(--r, 0deg);
+    filter: drop-shadow(0 6px 5px rgb(110 70 10 / .25));
+    cursor: pointer; -webkit-tap-highlight-color: transparent;
+    animation: crumb-bob 4.6s ease-in-out var(--delay, 0s) infinite;
+  }
+  .crumb::after { content: ""; position: absolute; inset: -8px; } /* a bigger target for fingers */
+  /* A golden glint, as on the game's crumbs. */
+  .crumb::before {
+    content: ""; position: absolute;
+    top: calc(var(--s, 40px) * -.12); right: calc(var(--s, 40px) * -.14);
+    width: max(11px, calc(var(--s, 40px) * .34)); height: max(11px, calc(var(--s, 40px) * .34));
+    background: var(--spark-gold) center / contain no-repeat;
+    filter: var(--gold-glow);
+    rotate: calc(-1 * var(--r, 0deg));
+    animation: twinkle 2.8s ease-in-out var(--delay, 0s) infinite;
+  }
+  @keyframes crumb-bob { 0%, 100% { translate: 0 0; } 50% { translate: 0 -5px; } }
+  @media (hover: hover) and (pointer: fine) { .crumb:hover { scale: 1.15; } }
+  .crumb { transition: scale .3s var(--ease-pop); }
+  .crumb.is-popped { pointer-events: none; animation: crumb-pop .4s ease-out forwards; }
+  @keyframes crumb-pop { 0% { scale: 1; opacity: 1; } 35% { scale: 1.35; opacity: 1; } 100% { scale: 0; opacity: 0; } }
+
+  .crumb-count {
+    position: fixed; z-index: 40;
+    right: max(14px, env(safe-area-inset-right)); bottom: max(14px, env(safe-area-inset-bottom));
+    display: flex; align-items: center; gap: 8px;
+    padding: 8px 16px 8px 10px; border-radius: 999px;
+    font: 600 .95rem/1 var(--font); color: var(--ink);
+    background: linear-gradient(180deg, rgb(255 255 255 / .92), rgb(226 241 255 / .92));
+    box-shadow: 0 10px 24px -12px rgb(13 78 166 / .6), inset 0 1px 1px #fff;
+    -webkit-backdrop-filter: blur(8px); backdrop-filter: blur(8px);
+    animation: count-in .5s var(--ease-pop) both;
+  }
+  .crumb-count[hidden] { display: none; }
+  .crumb-count::before {
+    content: ""; width: 28px; height: 28px;
+    background: url(img/crumbs-96.webp) center / contain no-repeat;
+  }
+  .crumb-count.is-done { animation: count-in .5s var(--ease-pop) both, count-out .6s ease 4s forwards; }
+  @keyframes count-in { from { opacity: 0; translate: 0 20px; scale: .8; } }
+  @keyframes count-out { to { opacity: 0; translate: 0 20px; } }
+  .fx { position: fixed; inset: 0; z-index: 50; pointer-events: none; overflow: hidden; }
+  .fx i {
+    position: absolute; left: var(--x); top: var(--y);
+    width: var(--fs, 18px); height: var(--fs, 18px);
+    background: var(--spark) center / contain no-repeat;
+    filter: var(--spark-glow);
+    translate: -50% -50%;
+    animation: burst var(--t, .7s) ease-out var(--delay, 0s) both;
+  }
+  .fx i.gold { background-image: var(--spark-gold); filter: var(--gold-glow); }
+  .fx i.small { background-image: var(--spark-small); }
+  @keyframes burst {
+    from { opacity: 1; transform: translate(0, 0) scale(.4) rotate(0deg); }
+    to { opacity: 0; transform: translate(var(--tx), var(--ty)) scale(1) rotate(var(--rot, 90deg)); }
+  }
+
+  /* ---------- footer ---------- */
   footer {
-    max-width: 720px;
-    margin: 64px auto 0;
-    padding-top: 20px;
-    border-top: 1px solid var(--line);
-    text-align: center;
-    font-size: 0.9rem;
-    color: var(--dim);
+    width: var(--wrap); margin: clamp(64px, 8vw, 112px) auto 0;
+    padding: 22px 0 calc(30px + env(safe-area-inset-bottom));
+    border-top: 1px solid rgb(13 78 166 / .15);
+    text-align: center; font-size: .9rem; line-height: 1.55; color: var(--dim);
   }
-  footer p { margin: 6px 0; }
-  @media (max-width: 560px) {
-    body { font-size: 17px; }
-    main { padding-top: 16px; }
-    .hero img { border-radius: 18px; }
-    h1 { font-size: 1.7rem; margin-top: 28px; }
-    .lead { font-size: 1.1rem; }
-    h2 { margin-top: 44px; }
-    .grid { grid-template-columns: 1fr; }
-    .need { padding: 8px 20px 12px; }
+  footer nav { display: flex; flex-wrap: wrap; justify-content: center; gap: 6px 18px; margin-bottom: 10px; font-size: 1rem; }
+
+  @media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after {
+      animation-duration: .01ms !important; animation-iteration-count: 1 !important;
+      animation-delay: 0s !important; transition-duration: .01ms !important;
+    }
+    .bubbles i { animation: none !important; top: var(--y); }
+    .hero-art img { animation: none !important; }
   }
 </style>
 </head>
 <body>
+
+<div class="bubbles" aria-hidden="true">
+  <i style="--x:4%;--y:12%;--s:120px;--d:70s;--delay:-8s;--o:.5"></i>
+  <i style="--x:14%;--y:62%;--s:46px;--d:48s;--delay:-30s;--sway:-24px"></i>
+  <i style="--x:27%;--y:30%;--s:78px;--d:62s;--delay:-50s;--o:.42"></i>
+  <i style="--x:41%;--y:84%;--s:32px;--d:44s;--delay:-12s;--sway:18px"></i>
+  <i style="--x:55%;--y:20%;--s:150px;--d:84s;--delay:-60s;--o:.36;--sway:-40px"></i>
+  <i style="--x:68%;--y:70%;--s:58px;--d:52s;--delay:-22s"></i>
+  <i style="--x:80%;--y:40%;--s:96px;--d:66s;--delay:-41s;--o:.45;--sway:-30px"></i>
+  <i style="--x:91%;--y:88%;--s:40px;--d:46s;--delay:-5s"></i>
+  <i style="--x:8%;--y:92%;--s:64px;--d:58s;--delay:-36s;--o:.4"></i>
+  <i style="--x:35%;--y:55%;--s:28px;--d:40s;--delay:-18s;--sway:-14px"></i>
+  <i style="--x:63%;--y:46%;--s:36px;--d:42s;--delay:-27s"></i>
+  <i style="--x:87%;--y:8%;--s:70px;--d:60s;--delay:-14s;--o:.42;--sway:26px"></i>
+</div>
+
+<header class="hero">
+  <h1 class="hero-logo">
+    <span class="lift" style="display:block">
+      <picture>
+        <source type="image/avif" srcset="img/logo-560.avif 560w, img/logo-1120.avif 1120w, img/logo-1517.avif 1517w"
+                sizes="(orientation: portrait) 78vw, (max-height: 520px) 57vh, (max-width: 1357px) 310px, 23vw">
+        <img src="img/logo-560.webp" srcset="img/logo-560.webp 560w, img/logo-1120.webp 1120w, img/logo-1517.webp 1517w"
+             sizes="(orientation: portrait) 78vw, (max-height: 520px) 57vh, (max-width: 1357px) 310px, 23vw"
+             width="1517" height="684" alt="Dusty" fetchpriority="high">
+      </picture>
+    </span>
+  </h1>
+  <div class="hero-art">
+    <picture>
+      <source media="(orientation: portrait)" type="image/avif" srcset="img/hero-tall-600.avif 600w, img/hero-tall-900.avif 900w" sizes="151vw">
+      <source media="(orientation: portrait)" type="image/webp" srcset="img/hero-tall-600.webp 600w, img/hero-tall-900.webp 900w" sizes="151vw">
+      <source type="image/avif" srcset="img/hero-wide-1086.avif 1086w, img/hero-wide-1448.avif 1448w, img/hero-wide-2172.avif 2172w"
+              sizes="(max-height: 520px) 337vh, (max-width: 1357px) 1552px, 115vw">
+      <img src="img/hero-wide-1448.webp" srcset="img/hero-wide-1086.webp 1086w, img/hero-wide-1448.webp 1448w, img/hero-wide-2172.webp 2172w"
+           sizes="(max-height: 520px) 337vh, (max-width: 1357px) 1552px, 115vw"
+           width="2172" height="644" fetchpriority="high"
+           alt="A sunny living room whose floor turns into grass, a lagoon and cooling lava where a vacuum passes, with Mote, a little flying robot, and a dust bunny nearby">
+    </picture>
+  </div>
+  <p class="tagline">Your mixed-reality cleaning buddy</p>
+  <div class="hero-actions">
+    <button type="button" class="bubble is-soon" aria-disabled="true" aria-describedby="soon-note" data-soon="Watch trailer: coming soon">
+      <svg viewBox="0 0 20 20" aria-hidden="true"><path fill="currentColor" d="M6.2 3.9c-.9-.5-2 .1-2 1.2v9.8c0 1 1.1 1.7 2 1.2l8.6-4.9c.9-.5.9-1.9 0-2.4z"/></svg>
+      Watch trailer<span class="soon-tag" aria-hidden="true">Coming soon</span>
+    </button>
+    <button type="button" class="bubble bubble-primary is-soon" aria-disabled="true" aria-describedby="soon-note" data-soon="Add to wishlist: coming soon">
+      <svg viewBox="0 0 20 20" aria-hidden="true"><path fill="currentColor" d="M10 17.3l-1.1-1C4.6 12.4 2 10 2 7.1 2 4.7 3.9 2.8 6.3 2.8c1.4 0 2.7.6 3.7 1.7 1-1.1 2.3-1.7 3.7-1.7 2.4 0 4.3 1.9 4.3 4.3 0 2.9-2.6 5.3-6.9 9.2z"/></svg>
+      Add to wishlist<span class="soon-tag" aria-hidden="true">Coming soon</span>
+    </button>
+  </div>
+</header>
+
+<div class="band">
+  <span class="band-shine" aria-hidden="true"></span>
+  <p><span>Coming soon on</span>
+    <span class="pill"><img src="img/meta-horizon.svg" width="4058" height="460" alt="Meta Horizon"></span></p>
+</div>
+
 <main>
 
-<figure class="hero">
-  <img src="img/hero-1600.webp"
-       srcset="img/hero-800.webp 800w, img/hero-1600.webp 1600w"
-       sizes="(max-width: 1032px) calc(100vw - 32px), 1000px"
-       width="1600" height="900"
-       alt="Dusty: a vacuum clears a path through grass, water and lava laid over a living room floor, while dust bunnies hop away and Mote, a little flying robot, looks on.">
-</figure>
+<section class="section split" aria-labelledby="fun">
+  <div class="split-text">
+    <h2 id="fun" class="sweep" data-reveal><span class="sweep-text">Cleaning made fun</span><span class="pair" aria-hidden="true"><i></i><i></i></span></h2>
+    <p data-reveal="up" style="--rd:.25s">Grab your vacuum or mop, put on your headset, and watch your floor transform.
+      <strong>In mixed reality,</strong> every move clears a path through snow, autumn leaves, or even
+      lava, leaving your real floor freshly cleaned underneath.</p>
+  </div>
+  <figure class="shot" data-reveal="pop">
+    <picture>
+      <source type="image/avif" srcset="img/fun-640.avif 640w, img/fun-960.avif 960w, img/fun-1280.avif 1280w"
+              sizes="(min-width: 1180px) 552px, (min-width: 900px) 47vw, (orientation: landscape) and (min-width: 640px) 47vw, 92vw">
+      <img src="img/fun-960.webp" srcset="img/fun-640.webp 640w, img/fun-960.webp 960w, img/fun-1280.webp 1280w"
+           sizes="(min-width: 1180px) 552px, (min-width: 900px) 47vw, (orientation: landscape) and (min-width: 640px) 47vw, 92vw"
+           width="1280" height="800" loading="lazy" decoding="async"
+           alt="Seen through the headset: a mop clears a strip of real floor through Ghost Fog while ghost dust bunnies float by the sofa, where a cat is asleep">
+    </picture>
+    <span class="crumb" aria-hidden="true" style="--s:50px;--r:18deg;top:-20px;right:-8px"></span>
+    <span class="crumb" aria-hidden="true" style="--s:34px;--r:-30deg;--delay:-2s;bottom:-12px;left:12%"></span>
+    <i class="spark" aria-hidden="true" style="--s:28px;top:-16px;left:-10px"></i>
+    <i class="spark small" aria-hidden="true" style="--s:15px;--delay:-2s;top:16px;left:20px"></i>
+  </figure>
+</section>
 
-<div class="intro">
-  <h1>Cleaning your home doesn't have to feel like a chore</h1>
-  <p class="lead"><strong>Dusty</strong> makes it easier to get started, more satisfying to keep
-    going, and a lot more fun along the way.</p>
-  <p>Just grab your vacuum or mop, put on your headset, and let your floor transform. In mixed
-    reality, every move clears a path through snow, autumn leaves, or even lava. Underneath it
-    all? Your actual, freshly cleaned floor.</p>
-  <p class="pill">Coming to the Meta Horizon Store</p>
+<section class="section split split-flip" aria-labelledby="zen">
+  <div class="split-text">
+    <h2 id="zen" class="sweep" data-reveal><span class="sweep-text">…and relaxing too!</span><span class="pair" aria-hidden="true"><i></i><i></i></span></h2>
+    <p data-reveal="up" style="--rd:.25s">Just turn on <strong>Zen mode</strong>: no timers, no pressure, no
+      distractions. Just you, your space, and that oddly satisfying feeling of making things clean.</p>
+  </div>
+  <figure class="shot" data-reveal="pop">
+    <picture>
+      <source type="image/avif" srcset="img/zen-640.avif 640w, img/zen-960.avif 960w, img/zen-1280.avif 1280w"
+              sizes="(min-width: 1180px) 552px, (min-width: 900px) 47vw, (orientation: landscape) and (min-width: 640px) 47vw, 92vw">
+      <img src="img/zen-960.webp" srcset="img/zen-640.webp 640w, img/zen-960.webp 960w, img/zen-1280.webp 1280w"
+           sizes="(min-width: 1180px) 552px, (min-width: 900px) 47vw, (orientation: landscape) and (min-width: 640px) 47vw, 92vw"
+           width="1280" height="800" loading="lazy" decoding="async"
+           alt="Seen through the headset: a vacuum clears a path through the Lagoon floor along a trail of crumbs, a cat by the sofa">
+    </picture>
+    <span class="crumb" aria-hidden="true" style="--s:44px;--r:-12deg;--delay:-1s;bottom:-16px;right:9%"></span>
+    <span class="crumb" aria-hidden="true" style="--s:30px;--r:40deg;--delay:-3s;top:-14px;left:-6px"></span>
+    <i class="spark" aria-hidden="true" style="--s:26px;--delay:-1s;top:-14px;right:-8px"></i>
+    <i class="spark small" aria-hidden="true" style="--s:15px;--delay:-3s;bottom:22px;left:-12px"></i>
+  </figure>
+</section>
+
+<div class="cta">
+  <button type="button" class="bubble bubble-primary is-soon" aria-disabled="true" aria-describedby="soon-note" data-soon="Add to wishlist: coming soon">
+    <svg viewBox="0 0 20 20" aria-hidden="true"><path fill="currentColor" d="M10 17.3l-1.1-1C4.6 12.4 2 10 2 7.1 2 4.7 3.9 2.8 6.3 2.8c1.4 0 2.7.6 3.7 1.7 1-1.1 2.3-1.7 3.7-1.7 2.4 0 4.3 1.9 4.3 4.3 0 2.9-2.6 5.3-6.9 9.2z"/></svg>
+    Add to wishlist<span class="soon-tag" aria-hidden="true">Coming soon</span>
+  </button>
 </div>
 
-<h2>Pick a mode. Pick a mood.</h2>
+<section class="section more" aria-labelledby="more">
+  <h2 id="more" class="sweep" data-reveal><span class="sweep-text">More about Dusty</span><span class="pair" aria-hidden="true"><i></i><i></i></span></h2>
+  <span class="crumb" aria-hidden="true" style="--s:40px;--r:-20deg;--delay:-1.5s;top:clamp(44px, 6.5vw, 96px);right:2%"></span>
+  <ul class="features">
+    <li data-reveal="up" style="--rd:.05s"><span class="icon-bubble"><img src="img/icon-broom-192.webp" width="60" height="60" alt="" loading="lazy" decoding="async"></span>
+      <p>All you need to start cleaning is a mop or vacuum and your Meta Quest&nbsp;3 or&nbsp;3S.</p></li>
+    <li data-reveal="up" style="--rd:.15s"><span class="icon-bubble" style="--fd:-1.2s"><img src="img/icon-paw-192.webp" width="60" height="60" alt="" loading="lazy" decoding="async"></span>
+      <p>Mote, your robot helper, guides you every step of the way.</p></li>
+    <li data-reveal="up" style="--rd:.25s"><span class="icon-bubble" style="--fd:-2.4s"><img src="img/icon-sock-192.webp" width="60" height="60" alt="" loading="lazy" decoding="async"></span>
+      <p>Find hidden lost treasures and unlock secret surprises.</p></li>
+    <li data-reveal="up" style="--rd:.35s"><span class="icon-bubble" style="--fd:-3.6s"><img src="img/icon-cat-ears-192.webp" width="60" height="60" alt="" loading="lazy" decoding="async"></span>
+      <p>Fully customizable, so the experience feels truly yours.</p></li>
+  </ul>
+  <div class="cta">
+    <button type="button" class="bubble is-soon" aria-disabled="true" aria-describedby="soon-note" data-soon="Join our Discord: coming soon">
+      Join our Discord<span class="soon-tag" aria-hidden="true">Coming soon</span>
+    </button>
+  </div>
+  <span class="crumb" aria-hidden="true" style="--s:30px;--r:25deg;--delay:-4s;bottom:4px;left:6%"></span>
+</section>
 
-<ul class="grid">
-  <li>
-    <h3>Just want to switch off?</h3>
-    <p>Put on some music, take your time, and find your flow. No timers, no pressure, no
-      distractions. Just you, your space, and that oddly satisfying feeling of making things
-      clean.</p>
-  </li>
-  <li>
-    <h3>Feeling a little playful?</h3>
-    <p>Let the dust bunnies out! Catch these fluffy troublemakers with your vacuum or mop,
-      discover lost treasures, and collect crumbs to unlock more fun.</p>
-  </li>
-  <li>
-    <h3>Meet Mote, your partner here</h3>
-    <p>Mote is always happy to lend a hand. He'll help you spot the places you've missed, remind
-      you when to rinse your mop, and point out where those sneaky dust bunnies might be hiding.</p>
-    <p>Rumor has it he's never missed a spot.</p>
-  </li>
-  <li>
-    <h3>Your room. Your rules.</h3>
-    <p>A rainy street, a lava field, or a snowy wonderland? Dusty has a look for every mood.</p>
-    <p>Mix, match, and make it yours! Customize everything from your floor to your dust bunnies,
-      and give Mote a fresh outfit, too. Unlock new looks, try wild combinations, and make every
-      cleaning session your own!</p>
-  </li>
-</ul>
+<section class="section" aria-labelledby="yours">
+  <div class="sheet yours" data-reveal="pop">
+    <span class="icon-bubble"><img src="img/icon-home-192.webp" width="60" height="60" alt="" loading="lazy" decoding="async"></span>
+    <div>
+      <h2 id="yours">Your home stays yours</h2>
+      <p>What the headset cameras see stays on your headset. The <a href="privacy/">privacy policy</a>
+        says exactly what Dusty uses.</p>
+    </div>
+    <span class="crumb" aria-hidden="true" style="--s:38px;--r:-35deg;--delay:-2.5s;top:-16px;right:22px"></span>
+  </div>
+</section>
 
-<h2>Features</h2>
-<div class="need">
-  <ol>
-    <li>Mixed reality gameplay that turns your own room into the cleaning zone</li>
-    <li>Vacuum and mop, two ways to clean</li>
-    <li>A friendly Mote helper who guides you through every step</li>
-    <li>Hidden lost treasures to collect for extra score</li>
-    <li>Unlock customizations: lava, grass, autumn leaves, ghost bunnies, and more</li>
-    <li>Zen mode for cozy, uninterrupted cleaning</li>
-    <li>Achievements for a more gamified experience</li>
-  </ol>
-</div>
+<section class="section about" aria-labelledby="about">
+  <div class="about-text">
+    <h2 id="about" class="sweep" data-reveal><span class="sweep-text">About us</span><span class="pair" aria-hidden="true"><i></i><i></i></span></h2>
+    <p data-reveal="up" style="--rd:.2s">Dusty is made by Nerobe Interactive, a small indie studio based in Kyiv,
+      Ukraine. We’re a family of five: a developer, a forever-young marketer, a baby tester, and two cats
+      who starred as models in our trailer footage. Dusty is our first project, and we’d be grateful for
+      your support and feedback!</p>
+    <div class="contact">
+      <a class="bubble bubble-primary" href="mailto:support@nerobeinteractive.com" data-contact aria-controls="contact-card">Contact us</a>
+      <div class="contact-card sheet" id="contact-card" hidden>
+        <p>Write to us at <a href="mailto:support@nerobeinteractive.com">support@nerobeinteractive.com</a></p>
+        <div class="contact-actions">
+          <button type="button" class="bubble" data-copy="support@nerobeinteractive.com" data-done="Copied!"><span class="label">Copy address</span></button>
+          <a class="bubble" href="mailto:support@nerobeinteractive.com">Open email app</a>
+        </div>
+      </div>
+    </div>
+  </div>
+  <figure class="photo" data-reveal="pop">
+    <picture>
+      <source type="image/avif" srcset="img/about-360.avif 360w, img/about-720.avif 720w" sizes="(min-width: 900px) 290px, (orientation: landscape) and (min-width: 640px) 290px, 74vw">
+      <img src="img/about-360.webp" srcset="img/about-360.webp 360w, img/about-720.webp 720w" sizes="(min-width: 900px) 290px, (orientation: landscape) and (min-width: 640px) 290px, 74vw"
+           width="720" height="960" loading="lazy" decoding="async"
+           alt="Our developer cleaning the floor in a Meta Quest headset while our baby tester watches from the doorway">
+    </picture>
+    <span class="crumb" aria-hidden="true" style="--s:46px;--r:12deg;--delay:-.5s;bottom:-14px;right:-16px"></span>
+    <span class="crumb" aria-hidden="true" style="--s:30px;--r:-50deg;--delay:-3.5s;top:-12px;left:-14px"></span>
+    <i class="spark" aria-hidden="true" style="--s:28px;--delay:-1.5s;top:-18px;right:-6px"></i>
+  </figure>
+</section>
 
-<h2>What you need</h2>
-<p class="sub">All you need is a Meta Quest 3 (Meta Quest 3S), a vacuum or mop, and a room
-  scan.</p>
-
-<h2>Your home stays yours</h2>
-<p class="sub">What the headset cameras see stays on your headset. The
-  <a href="privacy/">privacy policy</a> says exactly what Dusty uses.</p>
-
-<h2 id="contact">Contact</h2>
-<p class="center">Questions, ideas or press:
-  <a href="mailto:support@nerobeinteractive.com">support@nerobeinteractive.com</a></p>
+</main>
 
 <footer>
-  <p><a href="privacy/">Privacy policy</a></p>
+  <nav aria-label="Legal and contact">
+    <a href="privacy/">Privacy policy</a>
+    <a href="mailto:support@nerobeinteractive.com">support@nerobeinteractive.com</a>
+  </nav>
   <p>© 2026 Nerobe Interactive. Dusty is not affiliated with Meta. Meta Quest and Meta Horizon are
     trademarks of Meta Platforms, Inc.</p>
 </footer>
 
-</main>
+<span id="soon-note" hidden>Coming soon</span>
+<p id="live" class="sr-only" aria-live="polite"></p>
+<div class="crumb-count" hidden aria-hidden="true" data-done="Every crumb found!"><span class="crumb-text">Crumbs: <b class="found">0</b> of <b class="total">9</b></span></div>
+<div class="fx" aria-hidden="true"></div>
+
+<script>
+(() => {
+  const root = document.documentElement;
+  root.classList.add('reveal-on');
+  const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const fx = document.querySelector('.fx');
+
+  // Things rise, pop and sweep in as they come into view.
+  const reveal = document.querySelectorAll('[data-reveal]');
+  if ('IntersectionObserver' in window) {
+    const io = new IntersectionObserver((entries) => {
+      for (const e of entries) {
+        if (e.isIntersecting) { e.target.classList.add('is-in'); io.unobserve(e.target); }
+      }
+    }, { rootMargin: '0px 0px -10% 0px', threshold: 0.2 });
+    reveal.forEach((el) => io.observe(el));
+  } else {
+    reveal.forEach((el) => el.classList.add('is-in'));
+  }
+
+  // The logo's sheen waits for everything else to load.
+  addEventListener('load', () => document.querySelector('.hero-logo').classList.add('shine-on'));
+
+  const live = document.getElementById('live');
+  const say = (t) => { live.textContent = ''; setTimeout(() => { live.textContent = t; }, 60); };
+
+  // Sparkles flying out of a point (page coordinates of the viewport).
+  // The logo's sparkles: blue ('' or 'small') or gold like the crumbs' glint.
+  function burst(x, y, n, spread, kinds) {
+    if (reduce) return;
+    for (let i = 0; i < n; i++) {
+      const s = document.createElement('i');
+      const a = (i / n) * Math.PI * 2 + Math.random() * 0.8;
+      const r = spread * (0.6 + Math.random() * 0.6);
+      s.className = kinds[i % kinds.length];
+      s.style.cssText = `--x:${x}px;--y:${y}px;--tx:${Math.cos(a) * r}px;--ty:${Math.sin(a) * r}px;` +
+        `--fs:${12 + Math.random() * 12}px;--rot:${(Math.random() - 0.5) * 240}deg;--t:${0.55 + Math.random() * 0.3}s`;
+      fx.append(s);
+      setTimeout(() => s.remove(), 1000);
+    }
+  }
+
+  // Bubble buttons: the light follows the pointer, a press squashes, a click pops.
+  const KEYS = ['--hx', '--hy', '--lx', '--ly', '--dx', '--dy'];
+  document.querySelectorAll('.bubble').forEach((b, i) => {
+    b.style.setProperty('--fd', `${-i * 1.37}s`);
+    let raf = 0;
+    b.addEventListener('pointermove', (e) => {
+      if (e.pointerType !== 'mouse') return;
+      cancelAnimationFrame(raf);
+      raf = requestAnimationFrame(() => {
+        const r = b.getBoundingClientRect();
+        const x = (e.clientX - r.left) / r.width, y = (e.clientY - r.top) / r.height;
+        const v = [`${x * 100}%`, `${y * 100}%`, `${(x - 0.5) * 6}px`, `${(y - 0.5) * 4}px`, `${(x - 0.3) * 12}px`, `${(y - 0.3) * 5}px`];
+        KEYS.forEach((k, j) => b.style.setProperty(k, v[j]));
+      });
+    });
+    b.addEventListener('pointerleave', () => { cancelAnimationFrame(raf); KEYS.forEach((k) => b.style.removeProperty(k)); });
+    b.addEventListener('animationend', (e) => { if (e.animationName === 'wobble') b.classList.remove('is-wobble'); });
+    b.addEventListener('click', (e) => {
+      if (b.hasAttribute('data-contact')) {
+        e.preventDefault();
+        const card = document.getElementById(b.getAttribute('aria-controls'));
+        card.hidden = !card.hidden;
+        b.setAttribute('aria-expanded', String(!card.hidden));
+        return;
+      }
+      if (b.classList.contains('is-soon')) {
+        e.preventDefault();
+        b.classList.remove('is-wobble'); void b.offsetWidth; b.classList.add('is-wobble');
+        say(b.dataset.soon || 'Coming soon');
+        return;
+      }
+      if (!reduce) {
+        const ring = document.createElement('span');
+        ring.className = 'pop-ring';
+        b.append(ring);
+        for (let k = 0; k < 8; k++) {
+          const d = document.createElement('i');
+          const a = (k / 8) * Math.PI * 2 + Math.random() * 0.5;
+          d.className = 'drop';
+          d.style.cssText = `left:${50 + Math.cos(a) * 48}%;top:${50 + Math.sin(a) * 46}%;` +
+            `--tx:${Math.cos(a) * (30 + Math.random() * 26)}px;--ty:${Math.sin(a) * (16 + Math.random() * 16)}px`;
+          b.append(d);
+        }
+        setTimeout(() => b.querySelectorAll('.pop-ring, .drop').forEach((n) => n.remove()), 480);
+      }
+      // As in the app: the click lands when the bubble has popped (120 ms).
+      if (b.href && !reduce && b.target !== '_blank' && !(e.ctrlKey || e.metaKey || e.shiftKey || e.altKey) && e.button === 0) {
+        e.preventDefault();
+        setTimeout(() => { location.href = b.href; }, 120);
+      }
+    });
+  });
+
+  // Copy the address (the clipboard API needs https; the old way works on the home preview too).
+  document.querySelector('[data-contact]').setAttribute('aria-expanded', 'false');
+  document.querySelectorAll('[data-copy]').forEach((btn) => btn.addEventListener('click', async () => {
+    const label = btn.querySelector('.label'), text = label.textContent;
+    let ok = false;
+    try { await navigator.clipboard.writeText(btn.dataset.copy); ok = true; } catch {
+      const t = document.createElement('textarea');
+      t.value = btn.dataset.copy; t.setAttribute('readonly', ''); t.style.cssText = 'position:fixed;opacity:0';
+      document.body.append(t); t.select();
+      try { ok = document.execCommand('copy'); } catch {}
+      t.remove();
+    }
+    if (!ok) return;
+    label.textContent = btn.dataset.done;
+    say(btn.dataset.done);
+    setTimeout(() => { label.textContent = text; }, 1800);
+  }));
+
+  // Crumbs: pop them all.
+  const crumbs = [...document.querySelectorAll('.crumb')];
+  const count = document.querySelector('.crumb-count');
+  const found = count.querySelector('.found');
+  let got = 0, total = 0;
+  crumbs.forEach((c) => c.addEventListener('click', () => {
+    if (c.classList.contains('is-popped')) return;
+    if (!total) {
+      total = crumbs.filter((x) => x.getClientRects().length).length;
+      count.querySelector('.total').textContent = total;
+    }
+    c.classList.add('is-popped');
+    const r = c.getBoundingClientRect();
+    burst(r.left + r.width / 2, r.top + r.height / 2, 7, 46, ['gold', 'gold', 'small']);
+    got++;
+    found.textContent = got;
+    count.hidden = false;
+    if (got >= total) {
+      count.querySelector('.crumb-text').textContent = count.dataset.done;
+      count.classList.add('is-done');
+      if (!reduce) {
+        for (let k = 0; k < 28; k++) {
+          setTimeout(() => burst(Math.random() * innerWidth, Math.random() * innerHeight * 0.7, 3, 60, ['', 'gold', 'small']), k * 60);
+        }
+      }
+    }
+  }));
+})();
+</script>
 </body>
 </html>
